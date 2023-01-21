@@ -19,8 +19,8 @@ class TestSequenceFunctions(unittest.TestCase):
         self.assertEqual(self.ld.rhymes("read", "need"), True)
 
         self.assertEqual(self.ld.rhymes("dog", "cat"), False)
-        self.assertEqual(self.ld.rhymes("bagel", "sail"), False)
-        self.assertEqual(self.ld.rhymes("wine", "rind"), False)#returning true for some reason
+        self.assertEqual(self.ld.rhymes("bagel", "sail"), False)#this returning true
+        self.assertEqual(self.ld.rhymes("wine", "rind"), False)
         self.assertEqual(self.ld.rhymes("failure", "savior"), False)
         self.assertEqual(self.ld.rhymes("cup", "duck"), False)
 
