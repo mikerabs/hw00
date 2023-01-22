@@ -179,16 +179,6 @@ class LimerickDetector:
 
         
  
-    def rhyme(self,inp, level):
-        entries = nltk.corpus.cmudict.entries()
-        syllables = [(word, syl) for word, syl in entries if word == inp]
-        rhymes = []
-        for (word, syllable) in syllables:
-             rhymes += [word for word, pron in entries if pron[-level:] == syllable[-level:]]
-        return set(rhymes)
-
-    def dotheyrhymes(self,a,b):
-        return a in self.rhyme(self, b, 1)
 
    
     def is_limerick(self, text):
@@ -203,8 +193,26 @@ class LimerickDetector:
         (English professors may disagree with this definition, but that's what
         we're using here.)
         """
+        strings = text.split('\n')
+        if(len(strings) != 5):#limericks must have 5 lines to be a limerick
+            return False
 
-        return False
+        for i in range(len(strings)):
+            strings[i] = word_tokenize(strings[i])
+        
+        #check A1 and A2 rhyme
+        if(self.rhymes( strings[0][len(strings[0])-1], strings[1][len(strings[1])-1]) == False):
+            return False
+        #check that A2 and B1 DO NOT rhyme
+        if(self.rhymes(strings[1][len(strings[1])-1], strings[2][len(strings[2])-1]) == True):
+            return False
+        #check if B1 and B2 rhyme
+        if(self.rhymes( strings[2][len(strings[2])-1], strings[3][len(strings[3])-1]) == False):
+            return False
+        #check if A2 and A3 rhyme
+        if(self.rhymes( strings[1][len(strings[1])-1], strings[4][len(strings[4])-1]) == False):
+            return False
+        return True
 
     
 
@@ -221,6 +229,18 @@ if __name__ == "__main__":
     d = cmudict.dict()
     print(len(d[ex3.lower()]))
 
+    a = """a woman whose friends called a prude
+on a lark when bathing all nude
+saw a man come along
+and unless we are wrong
+you expected this line to be lewd"""
+
+    b = """while it's true all i've done is delay
+in defense of myself i must say
+today's payoff is great
+while the workers all wait"""
+    print(l.is_limerick(l,a))
+    print(l.is_limerick(l,b))
     #print(l.dotheyrhyme(l,ex,ex2))
     #buffer = ""
     #inline = " "

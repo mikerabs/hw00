@@ -39,27 +39,22 @@ class TestSequenceFunctions(unittest.TestCase):
 
     def test_examples(self):
 
-        a = """
-a woman whose friends called a prude
+        a = """a woman whose friends called a prude
 on a lark when bathing all nude
 saw a man come along
 and unless we are wrong
-you expected this line to be lewd
-        """
+you expected this line to be lewd"""
 
         b = """while it's true all i've done is delay
 in defense of myself i must say
 today's payoff is great
-while the workers all wait
-"""
+while the workers all wait"""
 
-        c = """
-this thing is supposed to rhyme
+        c = """this thing is supposed to rhyme
 but I simply don't got the time
 who cares if i miss,
 nobody will read this
-i'll end this here poem potato
-"""
+i'll end this here poem potato"""
 
         d = """There was a young man named Wyatt
 whose voice was exceedingly quiet
@@ -83,13 +78,13 @@ The dress caught fire
 And burned her entire
 Front page, sporting section and all."""
 
-        #self.assertEqual(self.ld.is_limerick(a), True)
-        #self.assertEqual(self.ld.is_limerick(b), False)
-        #self.assertEqual(self.ld.is_limerick(c), False)
-        #self.assertEqual(self.ld.is_limerick(d), False)
-        #self.assertEqual(self.ld.is_limerick(f), False)
-       # self.assertEqual(self.ld.is_limerick(e), True)
-       # self.assertEqual(self.ld.is_limerick(g), True)
+        self.assertEqual(self.ld.is_limerick(a), True)
+        self.assertEqual(self.ld.is_limerick(b), False)
+        self.assertEqual(self.ld.is_limerick(c), False)
+        self.assertEqual(self.ld.is_limerick(d), False)
+        self.assertEqual(self.ld.is_limerick(f), False)
+        self.assertEqual(self.ld.is_limerick(e), True)
+        self.assertEqual(self.ld.is_limerick(g), True)
 
 if __name__ == '__main__':
     unittest.main()
