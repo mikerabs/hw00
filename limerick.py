@@ -82,46 +82,115 @@ class LimerickDetector:
         matchindex = 0#find a matching pair of phonemes after icc, initialized to 0 for now
         matchflag = False
 
-        for k in range(len(b_phonemes)):#for all pronunciations of b
-            for i in range(len(b_phonemes[k])):#go through b's phonemes at pronunciation k
-                if i < len(b_icons[k]) :#we're skipping the indexes of the initial consonants of b
-                    continue
-                #i value must be at first vowel after initial consonant cluster for b, so loop through a's phonemes till we find a match
-                if i > len(b_icons[k]):
-                    break
-                
 
-                for l in range(len(a_phonemes)):#check all pronunciations of a
-                    for j in range(len(a_phonemes[l])):#go through phonemes of pronunciation l of word a
-                        if j < len(a_icons[l]):#we're skipping the indexes of the initial consonants of a
-                            continue 
-                        if j > len(a_icons[l]):
-                            break
-                        #j value must be at or after first vowel after initial consonant cluster for a
-                        if a_phonemes[l][j] == b_phonemes[k][i] : # if any of the phonemes after initial consonant cluster match, set the matching index to j and break the for loop
-                            matchflag = True
-                            matchindex = j
-                            break
-                    #check here for rest of word using a loop, if everything lines up for b[i] and a[matchindex] for both then return True
-                    if matchflag == True:
-                        #check here if the number of phonemes matches up, must have identical lengths -> wine and rind, but reset matchindex and matchflag and continue 
-                        if((len(a_phonemes[l])-matchindex) != (len(b_phonemes[k])-i)):
-                            matchflag = False
-                            matchindex = 0
-                            continue
-                        for j in range(len(a_phonemes[l])-matchindex):#both should have the same length if they do rhyme, so iterate
-                            if(b_phonemes[k][i+j] != a_phonemes[l][matchindex+j]):
-                                return False
-                        return True
+        if len(a_phonemes[0])<=len(b_phonemes[0]):
+            for k in range(len(b_phonemes)):#for all pronunciations of b
+                for i in range(len(b_phonemes[k])):#go through b's phonemes at pronunciation k
+
+                    #skip the indexes of the initial consonants of b
+                    if i < len(b_icons[k]) :
+                        continue
+
+                    #i value must be at first vowel after initial consonant cluster for b, so loop through a's phonemes till we find a match
+
+                    #if i > len(b_icons[k]) and b_phonemes[k][i]:#PROBLEM CAUSING ELEVEN AND SEVEN , TREE AND DEBRIS
+                        #break
+            
+                    #since a is less than b in number of phonemes, let's go throuhg the pronunciations of a and see if they line up with the kth pronunciation of b
+                    for l in range(len(a_phonemes)):#check all pronunciations of a
+                        for j in range(len(a_phonemes[l])):#go through phonemes of pronunciation l of word a
 
 
-        return False
+                            if j < len(a_icons[l]):#we're skipping the indexes of the initial consonants of a
+                                continue 
+                            #if j > len(a_icons[l])and a_phonemes[l][j]:#PROBLEM CAUSING ELEVEN AND SEVEN , TREE AND DEBRIS
+                            #  break
+                            #j value must be at or after first vowel after initial consonant cluster for a
+                            if a_phonemes[l][j] == b_phonemes[k][i] : # if any of the phonemes after initial consonant cluster match, set the matching index to j and break the for loop
+                                matchflag = True
+                                matchindex = j
+                                break
+
+                        #if matching phonemes were found, matchflag will be true
+                        if matchflag == True:
+                            #check here if the number of phonemes matches up, must have identical lengths -> wine and rind, but reset matchindex and matchflag and continue 
+                            if((len(a_phonemes[l])-matchindex) != (len(b_phonemes[k])-i)):
+                                matchflag = False
+                                matchindex = 0
+                                continue
+                            #in the case of bagel and sail, this should stop words from rhyming with last phonemes
+                            if((a_phonemes[l][matchindex] not in vowels and b_phonemes[k][i] not in vowels) and(matchindex == len(a_phonemes[l])-1 or i == len(b_phonemes[k])-1)):
+                                matchflag = False
+                                matchindex = 0
+                                continue
+                            for j in range(len(a_phonemes[l])-matchindex):#both should have the same length if they do rhyme, so iterate
+                                if(b_phonemes[k][i+j] != a_phonemes[l][matchindex+j]):
+                                    return False
+                            return True
+            return False    
+
+        else:#this is the case in which a is larger than b, so find b in a instead of the other way around
+            for k in range(len(a_phonemes)):#for all pronunciations of a
+                for i in range(len(a_phonemes[k])):#go through a's phonemes at pronunciation k
+
+                    #skip the indexes of the initial consonants of a
+                    if i < len(a_icons[k]) :
+                        continue
+
+                    #i value must be at first vowel after initial consonant cluster for a, so loop through a's phonemes till we find a match
+
+                    #if i > len(b_icons[k]) and b_phonemes[k][i]:#PROBLEM CAUSING ELEVEN AND SEVEN , TREE AND DEBRIS
+                        #break
+            
+                    #since b is less than a in number of phonemes, let's go throuhg the pronunciations of b and see if they line up with the kth pronunciation of a
+                    for l in range(len(b_phonemes)):#check all pronunciations of b
+                        for j in range(len(b_phonemes[l])):#go through phonemes of pronunciation l of word b
+
+
+                            if j < len(b_icons[l]):#we're skipping the indexes of the initial consonants of b
+                                continue 
+                            #if j > len(a_icons[l])and a_phonemes[l][j]:#PROBLEM CAUSING ELEVEN AND SEVEN , TREE AND DEBRIS
+                            #  break
+                            #j value must be at or after first vowel after initial consonant cluster for b
+                            if b_phonemes[l][j] == a_phonemes[k][i] : # if any of the phonemes after initial consonant cluster match, set the matching index to j and break the for loop
+                                matchflag = True
+                                matchindex = j
+                                break
+
+                        #if matching phonemes were found, matchflag will be true
+                        if matchflag == True:
+                            #check here if the number of phonemes matches up, must have identical lengths -> wine and rind, but reset matchindex and matchflag and continue 
+                            if((len(b_phonemes[l])-matchindex) != (len(a_phonemes[k])-i)):
+                                matchflag = False
+                                matchindex = 0
+                                continue
+                            if((b_phonemes[l][matchindex] not in vowels and a_phonemes[k][i] not in vowels) and(matchindex == len(b_phonemes[l])-1 or i == len(a_phonemes[k])-1)):
+                                matchflag = False
+                                matchindex = 0
+                                continue
+                            for j in range(len(b_phonemes[l])-matchindex):#both should have the same length if they do rhyme, so iterate
+                                if(a_phonemes[k][i+j] != b_phonemes[l][matchindex+j]):
+                                    return False
+                            return True
+            return False 
+
+        
+
+
+        
  
+    def rhyme(self,inp, level):
+        entries = nltk.corpus.cmudict.entries()
+        syllables = [(word, syl) for word, syl in entries if word == inp]
+        rhymes = []
+        for (word, syllable) in syllables:
+             rhymes += [word for word, pron in entries if pron[-level:] == syllable[-level:]]
+        return set(rhymes)
 
+    def dotheyrhymes(self,a,b):
+        return a in self.rhyme(self, b, 1)
 
-
-
-
+   
     def is_limerick(self, text):
         """
         Takes text where lines are separated by newline characters.  Returns
@@ -137,18 +206,22 @@ class LimerickDetector:
 
         return False
 
+    
+
+    
 if __name__ == "__main__":
-    ex = "eleven"
+    ex = "weigh"
     l = LimerickDetector
     print(l.num_syllables(l, ex))
 
-    ex2 = "seven"
+    ex2 = "fey"
     print(l.rhymes(l,ex,ex2))
 
     ex3 = "asdf"
     d = cmudict.dict()
     print(len(d[ex3.lower()]))
 
+    #print(l.dotheyrhyme(l,ex,ex2))
     #buffer = ""
     #inline = " "
     #while inline != "":
