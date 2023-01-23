@@ -1,5 +1,5 @@
 # Author: Mike Rabayda
-# Date: DATE SUBMITTED
+# Date: 1/22/2023
 
 # Use word_tokenize to split raw text into words
 from string import punctuation
@@ -93,8 +93,6 @@ class LimerickDetector:
 
                     #i value must be at first vowel after initial consonant cluster for b, so loop through a's phonemes till we find a match
 
-                    #if i > len(b_icons[k]) and b_phonemes[k][i]:#PROBLEM CAUSING ELEVEN AND SEVEN , TREE AND DEBRIS
-                        #break
             
                     #since a is less than b in number of phonemes, let's go throuhg the pronunciations of a and see if they line up with the kth pronunciation of b
                     for l in range(len(a_phonemes)):#check all pronunciations of a
@@ -103,8 +101,7 @@ class LimerickDetector:
 
                             if j < len(a_icons[l]):#we're skipping the indexes of the initial consonants of a
                                 continue 
-                            #if j > len(a_icons[l])and a_phonemes[l][j]:#PROBLEM CAUSING ELEVEN AND SEVEN , TREE AND DEBRIS
-                            #  break
+                            
                             #j value must be at or after first vowel after initial consonant cluster for a
                             if a_phonemes[l][j] == b_phonemes[k][i] : # if any of the phonemes after initial consonant cluster match, set the matching index to j and break the for loop
                                 matchflag = True
@@ -139,8 +136,7 @@ class LimerickDetector:
 
                     #i value must be at first vowel after initial consonant cluster for a, so loop through a's phonemes till we find a match
 
-                    #if i > len(b_icons[k]) and b_phonemes[k][i]:#PROBLEM CAUSING ELEVEN AND SEVEN , TREE AND DEBRIS
-                        #break
+                    
             
                     #since b is less than a in number of phonemes, let's go throuhg the pronunciations of b and see if they line up with the kth pronunciation of a
                     for l in range(len(b_phonemes)):#check all pronunciations of b
@@ -149,8 +145,7 @@ class LimerickDetector:
 
                             if j < len(b_icons[l]):#we're skipping the indexes of the initial consonants of b
                                 continue 
-                            #if j > len(a_icons[l])and a_phonemes[l][j]:#PROBLEM CAUSING ELEVEN AND SEVEN , TREE AND DEBRIS
-                            #  break
+                            
                             #j value must be at or after first vowel after initial consonant cluster for b
                             if b_phonemes[l][j] == a_phonemes[k][i] : # if any of the phonemes after initial consonant cluster match, set the matching index to j and break the for loop
                                 matchflag = True
@@ -197,20 +192,31 @@ class LimerickDetector:
         if(len(strings) != 5):#limericks must have 5 lines to be a limerick
             return False
 
+        #tokenize the words from sentences
         for i in range(len(strings)):
             strings[i] = word_tokenize(strings[i])
         
+        #clean out the punctuations
+        punctuation = [',', '.',':', '"']
+        for i in range(len(strings)):
+            for token in strings[i]:
+                if token in punctuation:
+                    strings[i].remove(token)
+                    
+        #check lines
+
+
         #check A1 and A2 rhyme
-        if(self.rhymes( strings[0][len(strings[0])-1], strings[1][len(strings[1])-1]) == False):
+        if(self.rhymes(strings[0][len(strings[0])-1], strings[1][len(strings[1])-1]) == False):
             return False
         #check that A2 and B1 DO NOT rhyme
         if(self.rhymes(strings[1][len(strings[1])-1], strings[2][len(strings[2])-1]) == True):
             return False
         #check if B1 and B2 rhyme
-        if(self.rhymes( strings[2][len(strings[2])-1], strings[3][len(strings[3])-1]) == False):
+        if(self.rhymes(strings[2][len(strings[2])-1], strings[3][len(strings[3])-1]) == False):
             return False
         #check if A2 and A3 rhyme
-        if(self.rhymes( strings[1][len(strings[1])-1], strings[4][len(strings[4])-1]) == False):
+        if(self.rhymes(strings[1][len(strings[1])-1], strings[4][len(strings[4])-1]) == False):
             return False
         return True
 
@@ -239,8 +245,44 @@ you expected this line to be lewd"""
 in defense of myself i must say
 today's payoff is great
 while the workers all wait"""
+
+    c = """this thing is supposed to rhyme
+but I simply don't got the time
+who cares if i miss,
+nobody will read this
+i'll end this here poem potato"""
+
+    d = """There was a young man named Wyatt
+whose voice was exceedingly quiet
+And then one day
+it faded away"""
+
+    e = """An exceedingly fat friend of mine,
+When asked at what hour he'd dine,
+Replied, "At eleven,
+At three, five, and seven,
+And eight and a quarter past nine"""
+
+    f = """A limerick fan from Australia
+regarded his work as a failure:
+his verses were fine
+until the fourth line"""
+
+    g = """There was a young lady one fall
+Who wore a newspaper dress to a ball.
+The dress caught fire
+And burned her entire
+Front page, sporting section and all."""
+
+
     print(l.is_limerick(l,a))
     print(l.is_limerick(l,b))
+    print(l.is_limerick(l,c))
+    print(l.is_limerick(l,d))
+    print(l.is_limerick(l,e))#index out of range
+    print(l.is_limerick(l,f))
+    print(l.is_limerick(l,g))
+
     #print(l.dotheyrhyme(l,ex,ex2))
     #buffer = ""
     #inline = " "
