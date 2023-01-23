@@ -6,7 +6,7 @@ from string import punctuation
 
 import nltk
 from nltk.tokenize import word_tokenize
-import cmudict
+
 
 class LimerickDetector:
 
@@ -22,7 +22,7 @@ class LimerickDetector:
         pronunciation, take the shorter one.  If there is no entry in the
         dictionary, return 1.
         """
-        d = cmudict.dict()
+        d = self._pronunciations
         phonemes = d[word.lower()]#gives us the pronunciation in a list
         #example turns into [['IH0', 'G', 'Z', 'AE1', 'M', 'P', 'AH0', 'L']]
 
@@ -38,7 +38,7 @@ class LimerickDetector:
         Returns True if two words (represented as lower-case strings) rhyme,
         False otherwise.
         """
-        d = cmudict.dict()
+        d = self._pronunciations
 
         a_phonemes = d[a.lower()]#all phonemes of word a
         b_phonemes = d[b.lower()]#all phonemes of word b
